@@ -1,5 +1,5 @@
 # .github/workflows/preview.yml
-name: deploy-ephemeral-previews
+name: pull-requests-preview-deployment
 
 on:
   pull_request:
