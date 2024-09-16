@@ -1,7 +1,7 @@
 on:
     push:
       branches:
-        - dev
+        - main
       paths-ignore:
         - '**/README.md'
     
@@ -23,6 +23,8 @@ jobs:
           run: npm install
   
         - name: Build App
+          env: 
+            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
           run: npm run build
     
         - name: Login to Docker Hub
