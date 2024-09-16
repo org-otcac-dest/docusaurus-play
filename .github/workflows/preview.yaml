@@ -23,7 +23,7 @@ jobs:
       - name: Install and Build
         if: github.event.action != 'closed' 
         env: 
-          REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}-${{ github.event.pull_request.number }}
+          REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
         run: |
           npm install
           npm run build
