@@ -10,7 +10,9 @@ on:
 jobs:
     build-preview:
       name: Build Preview
-      environment: preview
+      environment: 
+        name: preview
+        url: 'https://arch-stg.otc-service.com'
       runs-on: ubuntu-latest
   
       steps:
@@ -57,7 +59,9 @@ jobs:
     build-stable:
       name: Build Stable
       needs: [build-preview]
-      environment: stable
+      environment: 
+        name: stable
+        url: 'https://arch.otc-service.com/'
       runs-on: ubuntu-latest
   
       steps:
