@@ -56,6 +56,7 @@ jobs:
 
     build-stable:
       name: Build Stable
+      needs: [build-preview]
       environment: stable
       runs-on: ubuntu-latest
   
