@@ -14,10 +14,9 @@ on:
 
 jobs:
     preflight-check:
-      name: Pull Request Pre-Flight Checks 
+      name: Pre-Flight Checks 
       environment: 
         name: preview
-        url: 'https://arch-stg.otc-service.com'
       runs-on: ubuntu-latest
   
       steps:
@@ -62,8 +61,10 @@ jobs:
         #       ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
 
     deploy-ephemeral-preview:
-      name: Deploy Ephemeral GH Preview 
-      environment: pull-requests-preview
+      name: Deploy Ephemeral Preview 
+      environment: 
+        name: pull-requests-preview
+        url: 'https://arch-stg.otc-service.com'
       runs-on: ubuntu-20.04
       needs: [ preflight-check ]
 
