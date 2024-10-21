@@ -13,7 +13,7 @@ on:
         - synchronize
 
 jobs:
-    build-preview:
+    preflight-check:
       name: Pull Request Pre-Flight Checks 
       environment: 
         name: preview
@@ -60,3 +60,13 @@ jobs:
         #     push: true
         #     tags: |
         #       ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
+
+    deploy-ephemeral-preview:
+      environment: pull-requests-preview
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: Deploy Ephemeral GH Preview 
+          uses: rossjrw/pr-preview-action@v1
+          with:
+            source-dir: ./build/
