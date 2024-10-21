@@ -29,7 +29,7 @@ jobs:
           with:
             node-version: 18 # Use Node.js 18 here
   
-        - name: Install Dependencies
+        - name: Install NodeJS Dependencies
           run: npm install
   
         - name: Build App
