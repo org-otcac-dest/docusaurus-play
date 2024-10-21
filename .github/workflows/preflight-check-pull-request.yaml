@@ -32,7 +32,7 @@ jobs:
         - name: Install NodeJS Dependencies
           run: npm install
   
-        - name: Build App
+        - name: Build Static App
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
           run: npm run build
@@ -62,11 +62,23 @@ jobs:
         #       ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
 
     deploy-ephemeral-preview:
+      name: Deploy Ephemeral GH Preview 
       environment: pull-requests-preview
       runs-on: ubuntu-20.04
+      needs: [ preflight-check ]
 
       steps:
-        - name: Deploy Ephemeral GH Preview 
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Install and Build
+          env: 
+            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
+          run: |
+            npm install
+            npm run build
+
+        - name: Deploy
           uses: rossjrw/pr-preview-action@v1
           with:
             source-dir: ./build/
