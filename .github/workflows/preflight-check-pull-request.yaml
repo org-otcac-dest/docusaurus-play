@@ -14,7 +14,7 @@ on:
 
 jobs:
     build-preview:
-      name: Build 
+      name: Pull Request Pre-Flight Checks 
       environment: 
         name: preview
         url: 'https://arch-stg.otc-service.com'
