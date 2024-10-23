@@ -5,10 +5,13 @@ on:
       types: 
         - labeled 
         - unlabeled
+        - opened
+        - reopened
+        - synchronize
+        - edited
 
 jobs:
     check-release-gates:
-      if: ${{ github.event.label.name == 'approve-production' }}
       name: Check Release Gates
       runs-on: ubuntu-latest
   
