@@ -1,12 +1,13 @@
-name: merge-develop-pull-request
+name: merge-main-pull-request
 
 on:
-    push:
-      branches:
-        - develop
+    pull_request:
+      types: 
+        - labeled 
 
 jobs:
     build-preview:
+      if: ${{ github.event.label.name == 'stage' }}
       name: Build Staging Artifacts
       environment: 
         name: preview
@@ -51,4 +52,4 @@ jobs:
             file: ./Dockerfile
             push: true
             tags: |
-              ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{ steps.commit_hash.outputs.short }}-${{github.run_number}}
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
