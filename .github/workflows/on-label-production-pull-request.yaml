@@ -1,24 +1,19 @@
 name: on-label-production-pull-request
 
 on:
-    pull_request:
-      types: 
-        - labeled 
+  push:
+    branches: 
+      - main 
 
 jobs:
     build-stable:
-      if: ${{ github.event.label.name == 'approve-production' }}
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
       name: Build Production Artifacts
       environment: 
         name: stable
       runs-on: ubuntu-latest
   
       steps:
-        - name: Enforce Gates
-          uses: yogevbd/enforce-label-action@2.1.0
-          with:
-            REQUIRED_LABELS_ALL: "approve-production,approve-staging"
-
         - name: Checkout
           uses: actions/checkout@v4
   
