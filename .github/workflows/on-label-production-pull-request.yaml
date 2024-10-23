@@ -8,7 +8,6 @@ on:
 jobs:
     build-stable:
       if: | 
-        ${{ github.event.label.name == 'approve-staging' }} &&
         ${{ github.event.label.name == 'approve-production' }}
       name: Build Production Artifacts
       environment: 
@@ -16,6 +15,11 @@ jobs:
       runs-on: ubuntu-latest
   
       steps:
+        - name: Enforce Gates
+          uses: yogevbd/enforce-label-action@2.1.0
+          with:
+            REQUIRED_LABELS_ALL: "approve-production,approve-staging"
+
         - name: Checkout
           uses: actions/checkout@v4
   
