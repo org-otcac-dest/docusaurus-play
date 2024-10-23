@@ -1,4 +1,4 @@
-name: on-label-stage-pull-request
+name: on-label-staging-pull-request
 
 on:
     pull_request:
