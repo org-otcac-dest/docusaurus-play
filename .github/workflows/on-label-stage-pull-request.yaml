@@ -15,13 +15,14 @@ jobs:
   
       steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
   
         - name: Setup NodeJS
           uses: actions/setup-node@v2
           with:
             node-version: 18 # Use Node.js 18 here
-  
+            cache: false
+
         - name: Install NodeJS Dependencies
           run: npm install
   
