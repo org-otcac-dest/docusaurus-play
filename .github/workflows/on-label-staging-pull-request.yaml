@@ -55,7 +55,7 @@ jobs:
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
 
     update-helm-charts:
-      if: ${{ github.event.label.name == 'stage' }}
+      if: ${{ github.event.label.name == 'approve-staging' }}
       name: Update Staging Charts
       needs: [build-preview]
       environment: preview
