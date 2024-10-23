@@ -17,13 +17,20 @@ jobs:
       runs-on: ubuntu-latest
   
       steps:
+        - name: Relabel Pull Request
+          id: labelPr
+          uses: jburgess/AddRemovePrLabels@v1.0.4
+          with:
+            githubToken: ${{ github.token }}
+            labelsToRemove: approve-production, approve-staging
+
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
   
         - name: Setup NodeJS
-          uses: actions/setup-node@v4
+          uses: actions/setup-node@v2
           with:
-            cache: true
+            node-version: 18 # Use Node.js 18 here
   
         - name: Install NodeJS Dependencies
           run: npm install
@@ -46,16 +53,6 @@ jobs:
         - name: Get Commit Hash
           id: commit_hash
           uses: prompt/actions-commit-hash@v3
-
-        # - name: Build and Push (Docker Image)
-        #   id: docker_build 
-        #   uses: docker/build-push-action@v2
-        #   with: 
-        #     context: ./
-        #     file: ./Dockerfile
-        #     push: true
-        #     tags: |
-        #       ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
 
     deploy-ephemeral-preview:
       name: Deploy Ephemeral Preview 

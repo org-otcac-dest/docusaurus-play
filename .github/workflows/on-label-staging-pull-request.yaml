@@ -1,4 +1,4 @@
-name: merge-main-pull-request
+name: on-label-stage-pull-request
 
 on:
     pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
     build-preview:
-      if: ${{ github.event.label.name == 'stage' }}
+      if: ${{ github.event.label.name == 'approve-staging' }}
       name: Build Staging Artifacts
       environment: 
         name: preview
@@ -15,13 +15,13 @@ jobs:
   
       steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
   
         - name: Setup NodeJS
           uses: actions/setup-node@v2
           with:
             node-version: 18 # Use Node.js 18 here
-  
+
         - name: Install NodeJS Dependencies
           run: npm install
   
@@ -53,3 +53,27 @@ jobs:
             push: true
             tags: |
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
+
+    update-helm-charts:
+      if: ${{ github.event.label.name == 'stage' }}
+      name: Update Staging Charts
+      needs: [build-preview]
+      environment: preview
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Get Commit Hash
+          id: commit_hash
+          uses: prompt/actions-commit-hash@v3
+
+        - name: Show Commit Hash Digest
+          run: echo ${{ steps.commit_hash.outputs.short }}
+
+        - name: Configure Git User as GitHub Actions Bot
+          run: |
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+        - name: Update Charts and Commit Changes
+          id: update_charts
+          run: echo "test"
