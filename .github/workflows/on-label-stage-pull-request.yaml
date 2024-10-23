@@ -56,6 +56,7 @@ jobs:
 
     update-helm-charts:
       if: ${{ github.event.label.name == 'stage' }}
+      name: Update Staging Charts
       needs: [build-preview]
       environment: preview
       runs-on: ubuntu-latest
