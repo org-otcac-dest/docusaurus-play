@@ -7,7 +7,7 @@ on:
 
 jobs:
     build-preview:
-      if: ${{ github.event.label.name == 'stage' }}
+      if: ${{ github.event.label.name == 'approve-staging' }}
       name: Build Staging Artifacts
       environment: 
         name: preview
