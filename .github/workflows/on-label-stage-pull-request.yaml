@@ -1,12 +1,13 @@
-name: merge-develop-pull-request
+name: merge-main-pull-request
 
 on:
-    push:
-      branches:
-        - develop
+    pull_request:
+      types: 
+        - labeled 
 
 jobs:
     build-preview:
+      if: ${{ github.event.label.name == 'stage' }}
       name: Build Staging Artifacts
       environment: 
         name: preview
