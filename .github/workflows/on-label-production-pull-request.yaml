@@ -54,7 +54,6 @@ jobs:
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
 
     update-helm-charts:
-      if: ${{ github.event.label.name == 'approve-production' }}
       name: Update Production Charts
       needs: [build-stable]
       environment: stable
