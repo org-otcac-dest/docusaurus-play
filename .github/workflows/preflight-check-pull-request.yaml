@@ -18,7 +18,7 @@ jobs:
   
       steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
   
         - name: Setup NodeJS
           uses: actions/setup-node@v2
@@ -47,16 +47,6 @@ jobs:
           id: commit_hash
           uses: prompt/actions-commit-hash@v3
 
-        # - name: Build and Push (Docker Image)
-        #   id: docker_build 
-        #   uses: docker/build-push-action@v2
-        #   with: 
-        #     context: ./
-        #     file: ./Dockerfile
-        #     push: true
-        #     tags: |
-        #       ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMG_NAME }}:${{ vars.APP_VERSION }}.${{github.run_number}}-${{ steps.commit_hash.outputs.short }}-preview
-
     deploy-ephemeral-preview:
       name: Deploy Ephemeral Preview 
       environment: 
@@ -67,7 +57,7 @@ jobs:
 
       steps:
         - name: Checkout
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
 
         - name: Install and Build
           env: 
