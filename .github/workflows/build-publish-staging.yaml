@@ -35,8 +35,7 @@ jobs:
 
         - name: Get current date
           id: date
-          run: |
-            echo "{today}={$(date +'%Y%m%d')}" >> $GITHUB_ENV
+          run: echo "::set-output name=today::$(date +'%Y%m%d')"
 
         - name: Build Docker Metadata
           id: meta
@@ -47,7 +46,7 @@ jobs:
               ${{ vars.CONTAINER_REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
-              type=raw,value=${{ env.today }}-${{ steps.commit_hash.outputs.short }}
+              type=raw,value=${{ steps.date.outputs.today }}-${{ steps.commit_hash.outputs.short }}
               type=raw,value=latest
     
         - name: Login to Container Registry
