@@ -1,15 +1,16 @@
-name: build-publish-staging
+name: Build and Deploy Production Docker Images
 
 on:
-    push:
-      branches: 
-        - main 
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
 
 jobs:
-    build-preview:
-      name: Build Staging Artifacts
+    build-stable:
+      name: Build Production Artifacts
       environment: 
-        name: preview
+        name: stable
       runs-on: ubuntu-latest
   
       steps:
@@ -29,14 +30,6 @@ jobs:
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
           run: npm run build
         
-        - name: Get Commit Hash
-          id: commit_hash
-          uses: prompt/actions-commit-hash@v3
-
-        - name: Get Current Date
-          id: date
-          run: echo "::set-output name=today::$(date +'%Y%m%d')"
-
         - name: Build Docker Metadata
           id: meta
           uses: docker/metadata-action@v5
@@ -46,7 +39,8 @@ jobs:
               ${{ vars.CONTAINER_REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
-              type=raw,value=${{ steps.date.outputs.today }}-${{github.run_number}}-${{ steps.commit_hash.outputs.short }}
+              type=semver,pattern={{major}}.{{minor}}.{{patch}}
+              type=raw,value=latest
     
         - name: Login to Container Registry
           uses: docker/login-action@v3
