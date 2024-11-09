@@ -53,7 +53,7 @@ jobs:
           with:
             registry: ghcr.io/${{ github.repository }}
             username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+            password: ${{ github.token }}
 
         - name: Setup Docker Buildx
           id: buildx
