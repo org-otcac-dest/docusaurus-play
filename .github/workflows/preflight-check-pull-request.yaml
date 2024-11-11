@@ -1,4 +1,4 @@
-name: preflight-check-pull-request
+name: Deploy Ephemeral Pull Request Environment
 
 on:
     pull_request: 

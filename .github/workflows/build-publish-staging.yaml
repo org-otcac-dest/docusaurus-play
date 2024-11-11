@@ -1,4 +1,4 @@
-name: build-publish-staging
+name: Build and Deploy Staging Docker Images
 
 on:
     push:
