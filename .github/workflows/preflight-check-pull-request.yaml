@@ -29,12 +29,11 @@ jobs:
         - name: Install Dependencies
           run: npm install
 
-        - name: Run Linters
-          uses: wearerequired/lint-action@v2
-          with:
-            eslint: true
-            prettier: true
-  
+        - name: Run Linter
+          run: | 
+            cd src 
+            npm run lint
+            
         - name: Build Static App
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
