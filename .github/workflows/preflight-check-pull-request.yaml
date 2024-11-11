@@ -48,7 +48,7 @@ jobs:
       name: Deploy Ephemeral Preview 
       environment: 
         name: pull-requests-preview
-        url: 'https://arch-stg.otc-service.com'
+        url: 'https://${{ github.repository }}.github.io/${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}'
       runs-on: ubuntu-20.04
       needs: [ preflight-check ]
 
