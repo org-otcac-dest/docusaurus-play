@@ -39,7 +39,7 @@ jobs:
               ${{ vars.REGISTRY }}/${{ vars.REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
-              type=semver,pattern={{major}}.{{minor}}.{{patch}}
+              type=semver,pattern=v{{major}}.{{minor}}.{{patch}}
               type=raw,value=latest
     
         - name: Login to Container Registry
