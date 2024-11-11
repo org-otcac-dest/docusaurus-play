@@ -29,8 +29,11 @@ jobs:
         - name: Install Dependencies
           run: npm install
 
-        - name: Run Linter
-          run: npm run lint
+        - name: Run Linters
+          uses: wearerequired/lint-action@v2
+          with:
+            eslint: true
+            prettier: true
   
         - name: Build Static App
           env: 
