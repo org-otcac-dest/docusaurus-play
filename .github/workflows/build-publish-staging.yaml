@@ -65,7 +65,6 @@ jobs:
           with: 
             context: ./
             file: ./Dockerfile
-            sbom: true
             provenance: false
             push: ${{ github.event_name != 'pull_request' }}
             tags: ${{ steps.meta.outputs.tags }}
