@@ -43,7 +43,7 @@ jobs:
           with:
             # list of Docker images to use as base name for tags
             images: |
-              ${{ vars.REGISTRY_ORG }}/docusaurus-play
+              ${{ vars.REGISTRY }}/${{ vars.REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
               type=raw,value=${{ steps.date.outputs.today }}-${{github.run_number}}-${{ steps.commit_hash.outputs.short }}
