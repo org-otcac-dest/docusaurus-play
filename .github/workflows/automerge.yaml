@@ -51,11 +51,18 @@ jobs:
             source-dir: ./build/
             action: remove
 
+        - name: Create GitHub App Token
+          id: app-token
+          uses: actions/create-github-app-token@v1
+          with:
+            app-id: ${{ secrets.APP_ID }}
+            private-key: ${{ secrets.APP_KEY }}
+
         - id: automerge-lgtm
           name: Automerge with main
           uses: "pascalgn/automerge-action@v0.16.4"
           env:
-            GITHUB_TOKEN: "${{ github.token }}"
+            GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
             MERGE_LABELS: "lgtm"
             MERGE_METHOD: "squash"
             MERGE_ERROR_FAIL: true
