@@ -11,17 +11,6 @@ on:
           - ready_for_review
           - reopened
           - unlocked
-    pull_request_review:
-        types:
-          - submitted
-    check_suite:
-        types:
-          - completed
-    status: {}
-    workflow_run:
-      workflows: [Check Label Gates] 
-      types:
-        - completed
 
 jobs:
     automerge:
