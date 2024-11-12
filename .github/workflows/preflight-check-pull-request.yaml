@@ -1,14 +1,8 @@
 name: Deploy Ephemeral Pull Request Environment
 
 on:
-    pull_request: 
-      branches:
-        - main
-      types:
-        - opened
-        - reopened
-        - synchronize
-        - closed
+  pull_request:
+    branches: [ '*' ]
 
 jobs:
     preflight-check:
