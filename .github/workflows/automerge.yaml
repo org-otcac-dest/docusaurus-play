@@ -51,12 +51,12 @@ jobs:
             source-dir: ./build/
             action: remove
 
-        - name: Obtain a GitHub App Installation Access Token
-          id: githubAppAuth
-          run: |
-              TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
-              echo "::add-mask::$TOKEN"
-              echo "::set-output name=token::$TOKEN"
+        # - name: Obtain a GitHub App Installation Access Token
+        #   id: githubAppAuth
+        #   run: |
+        #       TOKEN="$(npx obtain-github-app-installation-access-token ci ${{ secrets.GH_APP_CREDENTIALS_TOKEN }})"
+        #       echo "::add-mask::$TOKEN"
+        #       echo "::set-output name=token::$TOKEN"
         # - name: Use the obtained token
         #   run: |
         #       curl -X POST -H 'Content-Type: application/json' \
@@ -69,7 +69,7 @@ jobs:
           name: Automerge with main
           uses: "pascalgn/automerge-action@v0.16.4"
           env:
-            GITHUB_TOKEN: ${{ steps.githubAppAuth.outputs.token }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             MERGE_LABELS: "lgtm"
             MERGE_METHOD: "squash"
             MERGE_ERROR_FAIL: true
