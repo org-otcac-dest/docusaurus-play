@@ -26,6 +26,7 @@ jobs:
             githubToken: ${{ github.token }}
             labelsToRemove: lgtm
 
+
         - name: Checkout
           if: github.event.action != 'closed'
           uses: actions/checkout@v4
