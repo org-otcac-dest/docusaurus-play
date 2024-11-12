@@ -15,7 +15,7 @@ jobs:
     automerge:
       name: Automatic Merge on Conditions
       runs-on: ubuntu-latest  
-      if: github.event.review.state == 'approved' && github.event.workflow_run.conclusion == 'success'
+      if: github.event.workflow_run.conclusion == 'success'
       permissions:
         contents: write
         pull-requests: write
