@@ -1,4 +1,4 @@
-name: Deploy Ephemeral Pull Request Environment
+name: Pre-flight Checks
 
 on:
     pull_request: 
@@ -12,7 +12,7 @@ on:
 
 jobs:
     preflight-check:
-      name: Pre-Flight Checks 
+      name: Checks 
       environment: 
         name: preview
       runs-on: ubuntu-latest
@@ -61,26 +61,4 @@ jobs:
             username: ${{ secrets.REGISTRY_USER }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    deploy-ephemeral-preview:
-      name: Deploy Ephemeral Preview 
-      environment: 
-        name: pull-requests-preview
-        url: 'https://${{ github.repository_owner }}.github.io${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}'
-      runs-on: ubuntu-20.04
-      needs: [ preflight-check ]
-
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-
-        - name: Install and Build
-          env: 
-            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
-          run: |
-            npm install
-            npm run build
-
-        - name: Deploy
-          uses: rossjrw/pr-preview-action@v1
-          with:
-            source-dir: ./build/
+    
