@@ -25,7 +25,7 @@ on:
 
 jobs:
     automerge:
-      name: Automatic Merge on Conditions
+      name: Merge if LGTM is present
       runs-on: ubuntu-latest  
       permissions:
         contents: write
