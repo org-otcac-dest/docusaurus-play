@@ -1,37 +1,46 @@
-name: automerge
+name: Automatic Merge
 
 on:
-  pull_request:
-    types:
-      - labeled
-      - unlabeled
-      - synchronize
-      - opened
-      - edited
-      - ready_for_review
-      - reopened
-      - unlocked
-  pull_request_review:
-    types:
-      - submitted
-  check_suite:
-    types:
-      - completed
-  status: {}
+    pull_request:
+      types: 
+        - labeled
+        - unlabeled
+        - synchronize
+        - opened
+        - edited
+        - ready_for_review
+        - reopened
+        - unlocked
+    workflow_run:
+        workflows: ['Check Label Gates']
+        types: [completed]
+    pull_request_review:
+      types:
+        - submitted
+    check_suite:
+      types:
+        - completed
 
 jobs:
-  automerge:
-    runs-on: ubuntu-latest
-    if: >
+    automerge:
+      name: Automatic Merge on Conditions
+      runs-on: ubuntu-latest  
+      if: >
         contains(github.event.pull_request.labels.*.name, 'lgtm')
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - id: automerge
-        name: automerge
-        uses: "pascalgn/automerge-action@v0.16.4"
-        env:
-          GITHUB_TOKEN: "${{ github.token }}"
-          MERGE_LABELS: "lgtm"
-          MERGE_METHOD: "squash"
+      permissions:
+        contents: write
+        pull-requests: write
+      
+      steps:
+        - name: Check Required Labels
+          uses: yogevbd/enforce-label-action@2.1.0
+          with:
+            REQUIRED_LABELS_ALL: "lgtm"
+
+        - id: automerge-lgtm
+          name: Automerge with main
+          uses: "pascalgn/automerge-action@v0.16.4"
+          env:
+            GITHUB_TOKEN: "${{ github.token }}"
+            MERGE_LABELS: "lgtm"
+            MERGE_METHOD: "squash"

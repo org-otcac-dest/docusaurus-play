@@ -1,18 +1,29 @@
-name: check-label-gates
+name: Check Label Gates
 
 on:
     pull_request:
       types: 
-        - labeled 
+        - labeled
         - unlabeled
-        - opened
-        - reopened
         - synchronize
+        - opened
         - edited
+        - ready_for_review
+        - reopened
+        - unlocked
+    workflow_run:
+        workflows: ['Deploy Ephemeral Pull Request Environment']
+        types: [completed]
+    # pull_request_review:
+    #   types:
+    #     - submitted
+    # check_suite:
+    #   types:
+    #     - completed
 
 jobs:
     check-release-gates:
-      name: Check Release Gates
+      name: Check LGTM Gate
       runs-on: ubuntu-latest
   
       steps:
@@ -20,3 +31,22 @@ jobs:
           uses: yogevbd/enforce-label-action@2.1.0
           with:
             REQUIRED_LABELS_ALL: "lgtm"
+    
+    # automerge:
+    #   name: Automatic Merging
+    #   runs-on: ubuntu-latest  
+    #   if: >
+    #     contains(github.event.pull_request.labels.*.name, 'lgtm')
+    #   permissions:
+    #     contents: write
+    #     pull-requests: write
+    #   needs: check-release-gates
+      
+    #   steps:
+    #     - id: automerge-lgtm
+    #       name: Automerge with main
+    #       uses: "pascalgn/automerge-action@v0.16.4"
+    #       env:
+    #         GITHUB_TOKEN: "${{ github.token }}"
+    #         MERGE_LABELS: "lgtm"
+    #         MERGE_METHOD: "squash"
