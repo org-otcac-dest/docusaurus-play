@@ -5,27 +5,12 @@ on:
       types: 
         - labeled
         - unlabeled
-        - synchronize
-        - opened
-        - edited
-        - ready_for_review
-        - reopened
-        - unlocked
-    workflow_run:
-        workflows: ['Deploy Ephemeral Pull Request Environment']
-        types: [completed]
-    # pull_request_review:
-    #   types:
-    #     - submitted
-    # check_suite:
-    #   types:
-    #     - completed
 
 jobs:
     check-release-gates:
       name: Check LGTM Gate
       runs-on: ubuntu-latest
-  
+
       steps:
         - name: Enforce Gates
           uses: yogevbd/enforce-label-action@2.1.0

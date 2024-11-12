@@ -1,23 +1,7 @@
 name: Automatic Merge
 
 on:
-    pull_request:
-      types: 
-        - labeled
-        - unlabeled
-        - synchronize
-        - opened
-        - edited
-        - ready_for_review
-        - reopened
-        - unlocked
-    workflow_run:
-        workflows: ['Check Label Gates']
-        types: [completed]
-    pull_request_review:
-      types:
-        - submitted
-    check_suite:
+    check_run:
       types:
         - completed
 
@@ -25,8 +9,6 @@ jobs:
     automerge:
       name: Automatic Merge on Conditions
       runs-on: ubuntu-latest  
-      if: >
-        contains(github.event.pull_request.labels.*.name, 'lgtm')
       permissions:
         contents: write
         pull-requests: write
