@@ -1,21 +1,14 @@
 name: Automatic Merge
 
 on:
-    # pull_request_review:
-    #   types:
-    #     - submitted
-    # check_suite:
-    #   types:
-    #     - completed
-    workflow_run:
-        workflows: ['Check Label Gates']
-        types: [completed]
+    check_suite:
+      types:
+        - completed
 
 jobs:
     automerge:
       name: Automatic Merge on Conditions
       runs-on: ubuntu-latest  
-      # if: github.event.workflow_run.conclusion == 'success'
       permissions:
         contents: write
         pull-requests: write
