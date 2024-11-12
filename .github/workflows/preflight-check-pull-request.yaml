@@ -1,12 +1,17 @@
-name: Pre-flight Checks
+name: Deploy Ephemeral Pull Request Environment
 
 on:
-  pull_request:
-    branches: [ '*' ]
+    pull_request: 
+      branches:
+        - main
+      types:
+        - opened
+        - reopened
+        - synchronize
 
 jobs:
     preflight-check:
-      name: Checks 
+      name: Pre-Flight Checks 
       environment: 
         name: preview
       runs-on: ubuntu-latest
@@ -14,26 +19,21 @@ jobs:
       steps:
         - name: Relabel Pull Request
           id: labelPr
-          if: github.event.action != 'closed' 
           uses: jburgess/AddRemovePrLabels@v1.0.4
           with:
             githubToken: ${{ github.token }}
             labelsToRemove: lgtm
 
-
         - name: Checkout
-          if: github.event.action != 'closed'
           uses: actions/checkout@v4
   
         - name: Setup NodeJS
           uses: actions/setup-node@v4
-          if: github.event.action != 'closed' 
           with:
             node-version: 'lts/*'
             cache: npm
   
         - name: Install Dependencies
-          if: github.event.action != 'closed' 
           run: npm install
 
         # - name: Run Linter
@@ -42,17 +42,37 @@ jobs:
         #     npm run lint
 
         - name: Build Static App
-          if: github.event.action != 'closed' 
           env: 
             REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}
           run: npm run build
     
         - name: Login to Container Registry
-          if: github.event.action != 'closed' 
           uses: docker/login-action@v3
           with:
             registry: ${{ vars.REGISTRY }}
             username: ${{ secrets.REGISTRY_USER }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    
+    deploy-ephemeral-preview:
+      name: Deploy Ephemeral Preview 
+      environment: 
+        name: pull-requests-preview
+        url: 'https://${{ github.repository_owner }}.github.io${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}'
+      runs-on: ubuntu-20.04
+      needs: [ preflight-check ]
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Install and Build
+          env: 
+            REACT_APP_DOCUSAURUS_BASE_URL: ${{ vars.DOCUSAURUS_BASE_URL }}pr-${{ github.event.pull_request.number }}
+          run: |
+            npm install
+            npm run build
+
+        - name: Deploy
+          uses: rossjrw/pr-preview-action@v1
+          with:
+            source-dir: ./build/
