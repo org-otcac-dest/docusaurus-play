@@ -44,3 +44,4 @@ jobs:
             GITHUB_TOKEN: "${{ github.token }}"
             MERGE_LABELS: "lgtm"
             MERGE_METHOD: "squash"
+            MERGE_ERROR_FAIL: true
