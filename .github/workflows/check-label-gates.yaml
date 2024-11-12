@@ -25,7 +25,8 @@ jobs:
     check-release-gates:
       name: Check LGTM Gate
       runs-on: ubuntu-latest
-  
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
       steps:
         - name: Enforce Gates
           uses: yogevbd/enforce-label-action@2.1.0
