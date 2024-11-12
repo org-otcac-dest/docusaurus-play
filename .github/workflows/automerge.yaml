@@ -1,7 +1,8 @@
 name: Automatic Merge
 
 on:
-    check_run:
+    workflow_run:
+      workflows: [Check Label Gates] 
       types:
         - completed
 
