@@ -1,4 +1,4 @@
-name: Deploy Ephemeral Pull Request Environment
+name: Automatic PR Checks
 
 on:
   pull_request:
@@ -6,13 +6,12 @@ on:
       - opened
       - reopened
       - synchronize
-      - closed
 
 concurrency: preview-${{ github.ref }}
 
 jobs:
-    preflight-check:
-      name: Pre-Flight Checks 
+    preflight-checks:
+      name: Preflight Checks 
       environment: 
         name: preview
       runs-on: ubuntu-latest
