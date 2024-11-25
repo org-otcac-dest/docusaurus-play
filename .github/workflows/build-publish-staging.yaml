@@ -39,7 +39,7 @@ jobs:
           id: commit_hash
           uses: prompt/actions-commit-hash@v3
 
-        - name: Get Current Date
+        - name: Get Current Dateffff
           id: date
           run: echo "today=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
@@ -47,21 +47,25 @@ jobs:
           id: build_image_tag
           run: echo "image_version=${{ steps.date.outputs.today }}.${{github.run_number}}.0-${{ steps.commit_hash.outputs.short }}" >> $GITHUB_OUTPUT
 
+        - name: Build Version Tag
+          id: build_version_tag
+          run: echo "image_version=${{ steps.date.outputs.today }}-${{github.run_number}}-${{ steps.commit_hash.outputs.short }}" >> $GITHUB_OUTPUT
+
         - name: Build Docker Metadata
           id: meta
           uses: docker/metadata-action@v5
           with:
             # list of Docker images to use as base name for tags
             images: |
-              akyriako78/docusaurus-play
+               ${{ vars.REGISTRY }}/ ${{ vars.REGISTRY_ORG }}/docusaurus-play
             # generate Docker tags based on the following events/attributes
             tags: |
-              type=raw,value=${{ steps.build_image_tag.outputs.image_version }}
-    
+              type=raw,value=${{ steps.build_version_tag.outputs.image_version }}    
         - name: Login to Container Registry
           uses: docker/login-action@v3
           with:
-            username: akyriako78
+            registry: ${{ vars.REGISTRY }}
+            username: ${{ secrets.REGISTRY_USER }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
           
         - name: Setup Docker Buildx
@@ -89,12 +93,6 @@ jobs:
         pull-requests: write
 
       steps:
-        - name: Create GitHub App Token
-          id: app-token
-          uses: actions/create-github-app-token@v1
-          with:
-            app-id: ${{ secrets.APP_ID }}
-            private-key: ${{ secrets.APP_KEY }}
         - name: Checkout Charts Repo
           uses: actions/checkout@v4
           with: 
@@ -116,6 +114,6 @@ jobs:
             remote_pr_branch: 'release/staging-${{ needs.build-preview.outputs.image_version }}'
           with:
             title: ${{ env.remote_pr_branch }}
-            token: ${{ steps.app-token.outputs.token }}
+            token: ${{ secrets.GITHUB_TOKEN }}
             branch: ${{ env.remote_pr_branch }}
           
